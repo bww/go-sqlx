@@ -24,9 +24,9 @@ func (d *Bytes) Scan(src interface{}) error {
 	case nil:
 		*d = nil
 	case []byte:
-		*d = Bytes(c)
+		*d = append((*d)[0:0], c...)
 	case string:
-		*d = Bytes(c)
+		*d = append((*d)[0:0], []byte(c)...)
 	default:
 		return fmt.Errorf("%w: %T", errInvalidType, src)
 	}
@@ -65,9 +65,9 @@ func (d *JSON) Scan(src interface{}) error {
 	case nil:
 		*d = nil
 	case []byte:
-		*d = JSON(c)
+		*d = append((*d)[0:0], c...)
 	case string:
-		*d = JSON(c)
+		*d = append((*d)[0:0], []byte(c)...)
 	default:
 		return fmt.Errorf("%w: %T", errInvalidType, src)
 	}
