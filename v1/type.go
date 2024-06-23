@@ -33,13 +33,11 @@ func (d *Bytes) Scan(src interface{}) error {
 	return nil
 }
 
-var null = []byte("null")
-
 type JSON json.RawMessage
 
 func (d JSON) MarshalJSON() ([]byte, error) {
-	if d == nil {
-		return null, nil
+	if len(d) == 0 {
+		return []byte("null"), nil
 	} else {
 		return d, nil
 	}
@@ -58,7 +56,7 @@ func (d JSON) Value() (driver.Value, error) {
 	if len(d) == 0 {
 		return nil, nil
 	} else {
-		return []byte(d), nil
+		return string(d), nil
 	}
 }
 
