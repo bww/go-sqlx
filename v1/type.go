@@ -9,6 +9,28 @@ import (
 
 var errInvalidType = errors.New("Invalid type")
 
+type String string
+
+func (d String) Value() (driver.Value, error) {
+	if len(d) == 0 {
+		return nil, nil
+	} else {
+		return string(d), nil
+	}
+}
+
+func (d *String) Scan(src interface{}) error {
+	switch c := src.(type) {
+	case nil:
+		*d = ""
+	case string:
+		*d = String(c)
+	default:
+		return fmt.Errorf("%w: %T", errInvalidType, src)
+	}
+	return nil
+}
+
 type Bytes []byte
 
 func (d Bytes) Value() (driver.Value, error) {

@@ -64,3 +64,13 @@ func Generalize[T any](s []T) []interface{} {
 	}
 	return g
 }
+
+// Append arguments of any type to a slice of type []interface{}. This
+// functions as a specialized version of the built-in append() operation
+// which is suitable for appending to a slice of empty interfaces.
+func Append[T any](a []interface{}, s ...T) []interface{} {
+	for _, e := range s {
+		a = append(a, e)
+	}
+	return a
+}
