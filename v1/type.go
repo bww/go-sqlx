@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 var errInvalidType = errors.New("Invalid type")
@@ -25,6 +26,28 @@ func (d *String) Scan(src interface{}) error {
 		*d = ""
 	case string:
 		*d = String(c)
+	default:
+		return fmt.Errorf("%w: %T", errInvalidType, src)
+	}
+	return nil
+}
+
+type Time time.Time
+
+func (d Time) Value() (driver.Value, error) {
+	if time.Time(d).IsZero() {
+		return nil, nil
+	} else {
+		return d, nil
+	}
+}
+
+func (d *Time) Scan(src interface{}) error {
+	switch c := src.(type) {
+	case nil:
+		*d = Time{}
+	case time.Time:
+		*d = Time(c)
 	default:
 		return fmt.Errorf("%w: %T", errInvalidType, src)
 	}
